@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax 3 - External JSON</title>
+    <style>
+      .user {
+        display: flex; 
+        background-color: #c5b2b2;
+        padding: 20px;
+        margin-bottom: 10px;
+      }
+    </style>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+    <button id="button">Load GitHub users</button>
+    <br>
+    <br>
+    <h1>GitHub users</h1>
+    <div id="tartalom"></div>
+</div>
+
+    <script>
+        document.getElementById('button').addEventListener('click', loadJSON);
+       
+        function loadJSON() {
+            let xhr = new XMLHttpRequest();
+
+           // console.log(xhr);
+
+            xhr.open('GET', 'https://api.github.com/users', true);
+
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    let users = JSON.parse(this.responseText);
+                    // console.log(valtozo.name);
+                    let tartalom = '';
+                    users.forEach((user) => {
+                        tartalom += '<div class="user">';
+                        let avatar = user.avatar_url;
+                        tartalom += `<img style="width:200px;" src ="${avatar}" alt="kép"/>`;
+                        tartalom += '<ul style="list-style-type:none;">';
+                        tartalom += `<li>ID: ${user.id}</li>`;
+                        tartalom += `<li>Login: ${user.login}</li>`;
+                        tartalom += '</ul>';
+                        tartalom += '</div>';
+                    });
+                   
+                   
+                    document.getElementById('tartalom').innerHTML = tartalom;
+                }
+            };
+
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
